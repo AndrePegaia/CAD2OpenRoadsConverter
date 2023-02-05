@@ -15,4 +15,4 @@ If everything goes as intended, the program will update your .xlsx coordinates f
 4) Press the button "Obter Coordenadas 3D" to 'merge' the 2D and profile coordinates to generate a 3D coordinates. The program uses linear approximation when the points are not exactlty the same.
 An OpenRoads 3D coordinates .txt file will be created and the command to create a smartline from it will be copied to your clipboard.
 
-Last updated on: 05 feb 2023. Currently working on updates to improve data exhibition and create an .exe version of it
+Last updated on: 05 feb 2023. Currently working on updates to improve data exhibition and create an .exe version of it.
