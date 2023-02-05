@@ -89,6 +89,9 @@ def open_new_sheet_window():
         event, values = windowNewSheet.Read()
         #"{values['InputSheetName']}.xlsx"
         if event == "ButtonCreate":
+            if os.path.exists(f"{values['InputSheetPath']}") == False:
+                os.mkdir(f"{values['InputSheetPath']}")
+
             folderPath = f"{values['InputSheetPath']}/{values['InputSheetName']}"
             if not os.path.exists(folderPath):
                 os.mkdir(folderPath)
