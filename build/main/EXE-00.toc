@@ -65,7 +65,7 @@
  [],
  False,
  False,
- 1675721405,
+ 1675722522,
  [('run.exe',
    'C:\\Users\\andre\\Desktop\\CAD2OpenRoadsConverter\\lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\run.exe',
    'EXECUTABLE')])

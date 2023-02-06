@@ -11,48 +11,6 @@ editingSheetPath = ""
 editingProjectPath = ""
 
 
-def setup_shortcut():
-    driveName = "OneDrive - SystraGroup"
-    companyDesktopPath = str(Path.home() / driveName / "Desktop")
-    folderPath = f"{companyDesktopPath}\CAD2OpenRoads"
-    shortcutPath = f"{folderPath}\CAD2OpenRoads - Atalho.lnk"
-
-    shell = win32com.client.Dispatch("WScript.Shell")
-
-    try:
-        if not os.path.exists(folderPath):
-            resourcesName = "resources"
-            os.mkdir(folderPath)
-            os.mkdir(f"{folderPath}\Projects")
-            os.mkdir(f"{folderPath}\{resourcesName}")
-            shutil.copyfile(os.path.abspath('resources/CoordinatesBaseSheet.xlsx'), f"{folderPath}\{resourcesName}\CoordinatesBaseSheet.xlsx")
-
-        if os.path.exists("main.exe"):
-            shortcut = shell.CreateShortCut(shortcutPath)
-            shortcut.Targetpath = os.path.abspath("main.exe")
-            shortcut.WindowStyle = 7
-            shortcut.save()
-    except:
-        try:
-            personalDesktopPath = str(Path.home() / "Desktop")
-            folderPath = f"{personalDesktopPath}\CAD2OpenRoads"
-            shortcutPath = f"{folderPath}\CAD2OpenRoads - Atalho.lnk"
-
-            if not os.path.exists(folderPath):
-                resourcesName = "resources"
-                os.mkdir(folderPath)
-                os.mkdir(f"{folderPath}\Projects")
-                os.mkdir(f"{folderPath}\{resourcesName}")
-                shutil.copyfile(os.path.abspath('resources/CoordinatesBaseSheet.xlsx'), f"{folderPath}\{resourcesName}\CoordinatesBaseSheet.xlsx")
-
-            if os.path.exists("main.exe"):
-                shortcut = shell.CreateShortCut(shortcutPath)
-                shortcut.Targetpath = os.path.abspath("main.exe")
-                shortcut.WindowStyle = 7
-                shortcut.save()
-        except:
-            print("Erro! Desktop não encontrado!!")
-
 def open_menu():
     global editingSheetPath
     editingSheetPath = ""
@@ -90,7 +48,7 @@ def open_menu():
             open_edit_sheet_window()
 
         if event == "ButtonSettings":
-            setup_shortcut()
+            open_settings_window()
 
         if event == sg.WINDOW_CLOSED or event == "ButtonClose":
             break
@@ -325,6 +283,78 @@ def open_select_file_window(fileFormat):
             break
 
     windowFileSelect.close()
+
+
+def open_settings_window():
+    layoutSelectWindow = [
+        [
+            sg.Text('', pad=(0, 5))],
+        [
+            sg.Text('Configurações', font=('Arial', 15))],
+        [
+            sg.Text('', pad=(0, 5))],
+        [
+            sg.Button('Criar atalho na área de trabalho', size=(35, 2), key='ButtonShortcut')]
+    ]
+
+    windowSettings = sg.Window('Gerador de Planilhas das Coordenadas', layoutSelectWindow, element_justification='c',
+                                size=(500, 200))
+
+    while True:
+        event, values = windowSettings.Read()
+
+        if event == 'ButtonShortcut':
+            setup_shortcut()
+            break
+
+        if event == sg.WINDOW_CLOSED or event == "ButtonClose":
+            break
+
+    windowSettings.close()
+
+
+def setup_shortcut():
+    driveName = "OneDrive - SystraGroup"
+    companyDesktopPath = str(Path.home() / driveName / "Desktop")
+    folderPath = f"{companyDesktopPath}\CAD2OpenRoads"
+    shortcutPath = f"{folderPath}\CAD2OpenRoads - Atalho.lnk"
+
+    shell = win32com.client.Dispatch("WScript.Shell")
+
+    try:
+        if not os.path.exists(folderPath):
+            resourcesName = "resources"
+            os.mkdir(folderPath)
+            os.mkdir(f"{folderPath}\Projects")
+            os.mkdir(f"{folderPath}\{resourcesName}")
+            shutil.copyfile(os.path.abspath('resources/CoordinatesBaseSheet.xlsx'), f"{folderPath}\{resourcesName}\CoordinatesBaseSheet.xlsx")
+
+        if os.path.exists("main.exe"):
+            shortcut = shell.CreateShortCut(shortcutPath)
+            shortcut.Targetpath = os.path.abspath("main.exe")
+            shortcut.WindowStyle = 7
+            shortcut.save()
+    except:
+        try:
+            personalDesktopPath = str(Path.home() / "Desktop")
+            folderPath = f"{personalDesktopPath}\CAD2OpenRoads"
+            shortcutPath = f"{folderPath}\CAD2OpenRoads - Atalho.lnk"
+
+            if not os.path.exists(folderPath):
+                resourcesName = "resources"
+                os.mkdir(folderPath)
+                os.mkdir(f"{folderPath}\Projects")
+                os.mkdir(f"{folderPath}\{resourcesName}")
+                shutil.copyfile(os.path.abspath('resources/CoordinatesBaseSheet.xlsx'), f"{folderPath}\{resourcesName}\CoordinatesBaseSheet.xlsx")
+
+            if os.path.exists("main.exe"):
+                shortcut = shell.CreateShortCut(shortcutPath)
+                shortcut.Targetpath = os.path.abspath("main.exe")
+                shortcut.WindowStyle = 7
+                shortcut.save()
+        except:
+            print("Erro! Desktop não encontrado!!")
+
 
 def main():
     sg.theme('DarkRed')
