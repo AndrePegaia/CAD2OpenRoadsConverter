@@ -181,7 +181,7 @@ def pasteProfile(editingSheetPath, editingProjectPath, window):
             #Adicionar ao texto na área de transferência
             clipboardCoordinates += f"{x}    {y} "
             # Coordenadas Perfis OpenRoads
-            ws[f'N{n + 6}'].value = f"xy={x},{y};"
+            ws[f'N{n + 6}'].value = f"xy={round(x,3)},{y};"
 
         #Salvar valores das coordenadas dos perfis na planilha
         wb.save(editingSheetPath)
@@ -250,41 +250,46 @@ def get3DCoordinates(editingSheetPath, editingProjectPath, window):
                                     ws[f"Q{thisValueIndex}"].value - ws[f"Q{lastValueIndex}"].value))
                     ws[f"K{n}"].value = alturaPonto
                     # Coordenadas Perfis OpenRoads
-                    ws[f'O{n}'].value = f"xy={ws[f'D{n}'].value},{ws[f'E{n}'].value},{alturaPonto};"
+                    ws[f'O{n}'].value = f"xy={ws[f'D{n}'].value},{ws[f'E{n}'].value},{round(alturaPonto,3)};"
 
                 elif ws[f"G{n}"].value > ws[f'Q{len(ws["Q"])}'].value:
                     Lfinal = ws[f'R{len(ws["R"])}'].value
                     ws[f"K{n}"].value = ws[f'R{len(ws["R"])}'].value
-                    ws[f'O{n}'].value = f"xy={ws[f'D{n}'].value},{ws[f'E{n}'].value},{Lfinal};"
+                    ws[f'O{n}'].value = f"xy={ws[f'D{n}'].value},{ws[f'E{n}'].value},{round(Lfinal,3)};"
 
                 else:
                     ws[f"K{n}"].value = ws[f"R{thisValueIndex}"].value
-                    ws[f'O{n}'].value = f"xy={ws[f'D{n}'].value},{ws[f'E{n}'].value},{ws[f'R{thisValueIndex}'].value};"
+                    ws[f'O{n}'].value = f"xy={ws[f'D{n}'].value},{ws[f'E{n}'].value},{ws[f'R{round(thisValueIndex,3)}'].value};"
 
-        #Salvar planilha
-        wb.save(editingSheetPath)
+        if (ws[f'O{6}'].value) == None:
+            window['TextAlertSteps'].update(visible=True)
+            window['TextAlertSteps'].update(
+                "(Erro - Passo 4)\nExecute os passos anteriores antes de tentar novamente!")
+        else:
+            #Salvar planilha
+            wb.save(editingSheetPath)
 
-        # Criar .txt no formato do OpenRoads
-        openRoadsTxt = "Place smartline\n"
-        i = 1
-        for cell in ws['O']:
-            if i >= 6:
-                openRoadsTxt += f"\n{cell.value}"
-            i += 1
-        openRoadsTxt += "\n\nReset"
+            # Criar .txt no formato do OpenRoads
+            openRoadsTxt = "Place smartline\n"
+            i = 1
+            for cell in ws['O']:
+                if i >= 6:
+                    openRoadsTxt += f"\n{cell.value}"
+                i += 1
+            openRoadsTxt += "\n\nReset"
 
-        with open(f"{editingProjectPath}/3D Coordinates OpenRoads.txt", "w") as txt3DCoord:
-            txt3DCoord.write(openRoadsTxt)
+            with open(f"{editingProjectPath}/3D Coordinates OpenRoads.txt", "w") as txt3DCoord:
+                txt3DCoord.write(openRoadsTxt)
 
-        clipboardOpenRoads = f'@"{txt3DCoord.name}"'
-        win32clipboard.OpenClipboard()
-        win32clipboard.EmptyClipboard()
-        win32clipboard.SetClipboardText(clipboardOpenRoads, win32clipboard.CF_TEXT)
-        win32clipboard.CloseClipboard()
+            clipboardOpenRoads = f'@"{txt3DCoord.name}"'
+            win32clipboard.OpenClipboard()
+            win32clipboard.EmptyClipboard()
+            win32clipboard.SetClipboardText(clipboardOpenRoads, win32clipboard.CF_TEXT)
+            win32clipboard.CloseClipboard()
 
-        window['TextAlertSteps'].update(visible=True)
-        window['TextAlertSteps'].update(
-            "(Passo 4 - Completo)\nInformações salvas com sucesso!\nCoordenadas copiadas para a área de transferência")
+            window['TextAlertSteps'].update(visible=True)
+            window['TextAlertSteps'].update(
+                "(Passo 4 - Completo)\nInformações salvas com sucesso!\nCoordenadas copiadas para a área de transferência")
 
     except:
         window['TextAlertSteps'].update(visible=True)

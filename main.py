@@ -2,10 +2,39 @@ import PySimpleGUI as sg
 import os
 from pathlib import Path
 import shutil
+
+import win32com.client
+
 from functions import convertCADtoOSGB36, importSnakeGrid, pasteProfile,get3DCoordinates
 
 editingSheetPath = ""
 editingProjectPath = ""
+
+
+def setup_shortcut():
+    driveName = "OneDrive - SystraGroup"
+    desktopPath = str(Path.home() / driveName / "Desktop")
+    folderPath = f"{desktopPath}\CAD2OpenRoads"
+    shortcutPath = f"{folderPath}\CAD2OpenRoads - Atalho.lnk"
+
+    shell = win32com.client.Dispatch("WScript.Shell")
+
+    if not os.path.exists(folderPath):
+        resourcesName = "resources"
+        os.mkdir(folderPath)
+        os.mkdir(f"{folderPath}\Projects")
+        os.mkdir(f"{folderPath}\{resourcesName}")
+        shutil.copyfile(os.path.abspath('resources/CoordinatesBaseSheet.xlsx'), f"{folderPath}\{resourcesName}\CoordinatesBaseSheet.xlsx")
+
+    if os.path.exists("main.exe"):
+        try:
+            shortcut = shell.CreateShortCut(shortcutPath)
+            shortcut.Targetpath = os.path.abspath("main.exe")
+            shortcut.WindowStyle = 7
+            shortcut.save()
+        except:
+            print("Erro! Desktop não encontrado!")
+
 
 def open_menu():
     global editingSheetPath
@@ -26,10 +55,11 @@ def open_menu():
         [
             sg.Text('', pad=(0, 5))],
         [
-            sg.Button('Fechar', size=(15, 1), key='ButtonClose')]
+            sg.Button('Fechar', size=(15, 3), key='ButtonClose'),
+            sg.Button('⚙️', font=('Arial', 14), size=(5, 2), key='ButtonSettings')],
     ]
 
-    window = sg.Window('Gerador de Planilhas das Coordenadas', layoutMenu, element_justification='c', size=(500, 325))
+    window = sg.Window('Gerador de Planilhas das Coordenadas', layoutMenu, element_justification='c', size=(500, 350))
 
     while True:
         event, values = window.Read()
@@ -41,6 +71,9 @@ def open_menu():
         if event == 'ButtonEditFile':
             window.close()
             open_edit_sheet_window()
+
+        if event == "ButtonSettings":
+            setup_shortcut()
 
         if event == sg.WINDOW_CLOSED or event == "ButtonClose":
             break
