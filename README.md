@@ -1,6 +1,10 @@
 # CAD2OpenRoadsConverter
 Application created to help importing polylines from AutoCAD to OpenRoads using SnakeGrid coordinate system.
 
+To install it, download the .zip of the project and extract it to a folder.
+Then, access the folder "CAD2OpenRoadsConverter-master/dist/main" and run the main.exe file.
+If you want to create a shortcut folder for the program in your desktop, go to the settings button "⚙️" and click on "Criar Atalho na área de trabalho".
+
 To use it, create a new project or use an existing one and follow each step respectively: 
 
 1) Use the command List in a 2D polyline on autocad and copy the coordinates to your clipboard. Then, press the button "Colar LIST 2D". 
