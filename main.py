@@ -13,28 +13,45 @@ editingProjectPath = ""
 
 def setup_shortcut():
     driveName = "OneDrive - SystraGroup"
-    desktopPath = str(Path.home() / driveName / "Desktop")
-    folderPath = f"{desktopPath}\CAD2OpenRoads"
+    companyDesktopPath = str(Path.home() / driveName / "Desktop")
+    folderPath = f"{companyDesktopPath}\CAD2OpenRoads"
     shortcutPath = f"{folderPath}\CAD2OpenRoads - Atalho.lnk"
 
     shell = win32com.client.Dispatch("WScript.Shell")
 
-    if not os.path.exists(folderPath):
-        resourcesName = "resources"
-        os.mkdir(folderPath)
-        os.mkdir(f"{folderPath}\Projects")
-        os.mkdir(f"{folderPath}\{resourcesName}")
-        shutil.copyfile(os.path.abspath('resources/CoordinatesBaseSheet.xlsx'), f"{folderPath}\{resourcesName}\CoordinatesBaseSheet.xlsx")
+    try:
+        if not os.path.exists(folderPath):
+            resourcesName = "resources"
+            os.mkdir(folderPath)
+            os.mkdir(f"{folderPath}\Projects")
+            os.mkdir(f"{folderPath}\{resourcesName}")
+            shutil.copyfile(os.path.abspath('resources/CoordinatesBaseSheet.xlsx'), f"{folderPath}\{resourcesName}\CoordinatesBaseSheet.xlsx")
 
-    if os.path.exists("main.exe"):
-        try:
+        if os.path.exists("main.exe"):
             shortcut = shell.CreateShortCut(shortcutPath)
             shortcut.Targetpath = os.path.abspath("main.exe")
             shortcut.WindowStyle = 7
             shortcut.save()
-        except:
-            print("Erro! Desktop não encontrado!")
+    except:
+        try:
+            personalDesktopPath = str(Path.home() / "Desktop")
+            folderPath = f"{personalDesktopPath}\CAD2OpenRoads"
+            shortcutPath = f"{folderPath}\CAD2OpenRoads - Atalho.lnk"
 
+            if not os.path.exists(folderPath):
+                resourcesName = "resources"
+                os.mkdir(folderPath)
+                os.mkdir(f"{folderPath}\Projects")
+                os.mkdir(f"{folderPath}\{resourcesName}")
+                shutil.copyfile(os.path.abspath('resources/CoordinatesBaseSheet.xlsx'), f"{folderPath}\{resourcesName}\CoordinatesBaseSheet.xlsx")
+
+            if os.path.exists("main.exe"):
+                shortcut = shell.CreateShortCut(shortcutPath)
+                shortcut.Targetpath = os.path.abspath("main.exe")
+                shortcut.WindowStyle = 7
+                shortcut.save()
+        except:
+            print("Erro! Desktop não encontrado!!")
 
 def open_menu():
     global editingSheetPath
